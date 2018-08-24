@@ -1,0 +1,274 @@
+=Navigating=
+    baseUrl = "http://site.com";
+    open("/login");
+    
+    open("http://google.com");
+    switchTo().frame($("#myFrame").toWebElement());
+
+
+=WebDriver=
+   getWebDriver().findElement(By.id("username"));     // import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+   WebDriverRunner.setWebDriver(myWebDriver);
+
+=Selecting=
+$$("div").first();
+$$("div").last();
+$$("div").get(2); // get third element, index from 0
+$$("div").findBy(text("123")); // finds the first element
+Filtering:
+$$("div").filterBy(text("123")); //only with text 123
+$$("div").excludeWith(text("123")); // all except with text 123
+   
+
+=Page and Browser=
+    startMaximized = true;
+    holdBrowserOpen = true;
+    getWebDriver().manage().window().maximize();
+    getWebDriver().manage().window().setSize(new Dimension(0,0));   // to minimize
+    sleep(5000);
+    refresh();
+    url();
+    source();
+    getWebDriver().getTitle();
+    confirm();
+    confirm("expectedDialogText");
+    dismiss();
+    writeToFile("content", targetFile);
+    takeScreenShot("fileName");
+    clearBrowserCache();
+    addListener(listener);
+
+    ie();   //is selenide configured to use IE
+    phantomjs();
+    htmlUnit();
+
+
+=Find element(s)=
+$ for element
+$$ for elements
+
+  --> Css 
+    $("#element");
+    $$("#elements");
+
+  ---> By
+    $(By.id(""));
+    $(By.cssSelector(""));
+    $(By.xpath(""));    
+    $(By.className(""));
+    $(By.name(""))
+    $(By.tagName(""));
+    $(By.linkText(""));
+    $(By.partialLinkText(""));
+    
+    
+    $(byText("Logout"));        // search by exact text
+    $(withText("Logout"));      // search by text (substring)
+    $(byTitle("Logout"));       // search by "title" attribute
+    $(byAttribute("class", "g"));   // search by attribute
+    $(byValue("example"));      // search by "value" attribute
+
+    
+=Clicking links and buttons=
+    $("#agreement").submit();
+    $("#lst-ib").sendKeys(Keys.chord(Keys.CONTROL, "a"));   // select all
+    actions().click($("#rememberMe")).build().perform();
+    actions().click($("#lst-ib").val("selenide")).build().perform();
+    
+=Javascript=
+    executeJavaScript("console.log('Hello')");
+
+
+=Keyboard=
+actions().keyDown(Keys.ALT).sendKeys("a").keyUp(Keys.ALT);
+$("q").pressEnter();
+$("q").pressTab();
+
+=Mouse=
+$(".class").click();
+$("#id").contextClick(); //right click on element
+$("h1").doubleClick(); //double click on element
+$(".class").hover(); //mouse over element
+
+
+=Interacting with forms=
+    $("#login").setValue("John Doe");
+    $("#login").val("John Doe");
+    $(".menu").selectOption(String text);
+    $(By.name("menu")).selectOptionByValue(String value);
+    $(By.name("menu")).getSelectedOption();
+    $(By.name("menu")).getSelectedText();
+    $(By.name("menu")).getSelectedValue();
+    selectRadio(By.name("user.gender"), "male");
+    $("#element")).hover();
+    
+    Upload/Download files
+    $("#upload").uploadFromClasspath("c:/files/my-file.txt");
+    $("#upload").uploadFile("c:/files/my-file.txt");
+    File file = $("#download_button").download();
+    $("#cv").uploadFile(
+        new File("cv1.doc"),
+        new File("cv2.doc"),
+        new File("cv3.doc"),
+        new File("cv4.doc"));
+
+
+
+=Scoping=
+    $("#mainElement").$("#subElement");
+    $("#customerContainer").find(".user_name");
+    $$("li").get(5); 
+    $("li", 5);  // looking for Nth element 
+
+
+=Scolling=
+    $("#id").scrollTo(); //scrolling to element 
+
+=Returns=
+ElementsCollection collection = $$("div").filterBy(text("123"));
+// even when filters to a single element!
+ElementsCollection collection2 = $$("div").filterBy(text("xyz"));
+// empty collection!
+SelenideElement element = $$("div").get(2);
+SelenideElement element2 = $$("div").find(text("xyz")); // null?
+
+
+=Checkboxs=
+$("input[type=checkbox]").click();
+$("input[type=checkbox]").shouldBe(checked);
+//or
+$("input[type=checkbox]").setSelected(true);
+$("input[type=checkbox]").shouldBe(checked);
+$("input[type=checkbox]", 1).setSelected(false);
+$("input[type=checkbox]", 1).shouldNotBe(checked);
+
+=Dropdown=
+$("#dropdown").selectOption("Option 2"); //exact text match
+$("#dropdown").selectOptionContainingText("ption 1"); //partial match
+$("#dropdown").selectOption(3); //starting from 0, fourth option
+$("#dropdown").selectOptionByValue("1");
+$("#dropdown").getSelectedOption().shouldBe(disabled);
+$("#dropdown").getSelectedOption().shouldHave(text("Option 1"), value("1"));   
+
+    
+
+=Assertions=
+
+    Size assertion:
+    $$("div").shouldBe(CollectionCondition.empty);
+    $$("div").shouldHave(size(5)); / or $$("div").shouldHaveSize(5);
+    $$("div").shouldHave(sizeGreaterThan(1));
+    $$("div").shouldHave(sizeGreaterThanOrEqual(1));
+    $$("div").shouldHave(sizeLessThan(100));
+    $$("div").shouldHave(sizeLessThanOrEqual(100));
+    $$("div").shouldHave(sizeNotEqual(1984));
+    Text assertions (case sensitive):
+    $$("div").shouldHave(texts(”kjlj", ”TTHT")); //partial matches of every
+    single text
+    $$("div").shouldHave(exactTexts(”Here is your", ”Hamburger"));
+
+    Positive assertions:
+    $("selector").shouldBe(visible);
+    $("selector").should(appear); // Same as $("selector").shouldBe(visible);
+    $("selector").should(exist);//element should exist in DOM
+    Negative assertions:
+    $("selector").shouldBe(hidden);// Same as $("selector").should(disappear);
+    $("selector").shouldNot(exist); //element should not exist in DOM
+
+    $("selector").shouldHave(text("CHEEZBURGER"));
+    //case insensitive, partial match
+    $("selector").shouldHave(textCaseSensitive("Cheezburger"));
+    //case sensitive, partial match
+    $("selector").shouldHave(exactText("DOUble CHeezBurGer"));
+    //case insensitive, exact match
+    $("selector").shouldHave(exactTextCaseSensitive("Double Cheezburger"));
+    //case sensitive, exact match
+    $("selector").should(matchText("[A..Z]eezburger"));
+    //regexp
+
+    $("selector").shouldHave(attribute("layout", "row"));
+    //with value
+    $("selector").shouldNotHave(attribute("href"));
+    //any value
+    $("selector").shouldHave(cssClass(".class"));
+    $("[type=button]").shouldHave(type("button"));
+    $("[type=button]").shouldNotHave(id("idselector"));
+
+    $("#element").shouldHave(text("abc"));
+    $("h1").shouldHave(exactText("Hello"))
+    $("h1").shouldHave(textCaseSensitive("Hello\s*John"));
+    $("h1").shouldHave(exactTextCaseSensitive("Hello"));
+    $("#input").shouldHave(exactValue("John"));
+    Html.text.containsCaseSensitive(source(), "Text pattern From Page Source");
+    
+    $("h1").shouldHave(css("font-size", "16px"));
+    $$("#mytable tbody tr").shouldHave(size(2));
+    $("#input").shouldHave(name("fname"));
+    $("#input").shouldHave(value("John"));
+    $("#input").shouldHave(type("checkbox"));
+    $("#input").shouldHave(id("myForm"));
+    $("#input").shouldNotHave(text("Hello"), text("World"));
+   
+    $$(".errors").shouldHave(size(2));
+    $$(".errors").shouldHave(exactTexts("text 1", "text 2"));
+    $$(".errors").shouldHave(texts("text 1", "text 2"));
+    
+    $("input").shouldBe(visible, enabled);     //visible | appear
+    $("input").shouldBe(exist);                //present | exist  
+    $("input").shouldBe(hidden);               //hidden | disappear | not(visible) 
+    $("input").shouldBe(readonly); 
+    $("input").shouldBe(focused);
+    $(".errors").shouldBe(empty);
+    $$(".errors").shouldBe(empty);
+    $("input").shouldNotBe(visible, enabled);
+    $("#element").should(exist);
+
+=Querying=
+    $("#element").isDisplayed();
+    $("#element").exists(); 
+
+    $$("#multirowTable tr").findBy(text("Norris"));
+    $$("#multirowTable tr").filterBy(text("Norris"));
+    $$("#multirowTable tr").excludeWith(text("Chack"));    
+    
+    $$(“#employees tbody tr”)
+    .filter(visible)
+    .shouldHave(size(4));
+
+=Search for parents/children=
+    $(“td”).parent()
+    $(“td”).closest(“tr”)
+    $(“.btn”).closest(“.modal”)
+    $(“div”).find(By.name(“q”))
+
+
+=Collections=
+Collections are iterable SelenideElements:
+ElementsCollection collection = $$("div");
+$$("selector"); // doesn't search anything!
+They use the same Selectors as in $:
+$$(withText("eezburger"));
+
+
+==Wait==    
+
+with text/value/attribute
+    $("#welcome").waitUntil(hasText("Hello, Johny!"), 2000);
+    $("#username").waitUntil(hasAttribute("name", "user.name"), 2000);
+    $("#username").waitUntil(hasClass("green-button"), 2000);
+    $("#username").waitUntil(hasValue("123"), 2000);
+    $("#username").waitUntil(matchesText("Johny"), 2000);
+    $("#username").waitUntil(not(matchesText("Noname")), 2000);
+    $("#username").waitUntil(matchText("^Johny$"), 2000);
+    
+with Conditions
+    $("#username").waitUntil(present, 5000);
+    $("#username").waitUntil(enabled, 5000);
+    $("#username").waitUntil(disabled, 5000);
+    $("#username").waitUntil(visible, 5000);
+    $("#username").waitUntil(appears, 5000);
+    $("#username").waitUntil(disappears, 5000);
+    
+    
+==Command Line==
+    $ mvn test -Dbrowser=chrome
