@@ -1,0 +1,5 @@
+
+                                              
+UPLOAD_APPS_TO_SAUCE_API --> curl -u ACCOUNT_NAME:9s3s0-h9-6jnn-34gdf-nh34-h5j6t4g5hj76tr -X POST -H "Content-Type: application/octet-stream" https://saucelabs.com/rest/v1/storage/ACCOUNT_NAME/NAME_OF_APP_TO_BE_IN_SAUCE.ipa --data-binary @/Users/danielocean/Documents/path/to/android_or_iphone_app.ipa
+
+GET_SAUCE_APPS="curl -u ACCOUNT_NAME:9s3s0-h9-6jnn-34gdf-nh34-h5j6t4g5hj76tr https://saucelabs.com/rest/v1/storage/ACCOUNT_NAME"
