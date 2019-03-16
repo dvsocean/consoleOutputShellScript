@@ -1,0 +1,6 @@
+
+  curl -H "Content-Type: application/json" -d '{"engine":"SuperChargedJavaScript", "color":"Stripped and coiled"}' -X POST http://localhost:5050/updateNode/{name}
+
+  or a more excplicit format,
+  curl --header "Content-Type: application/json" --data '{"engine":"V55","color":"black and yellow"}' -X POST http://localhost:5050/updateNode/{name}
+ 
